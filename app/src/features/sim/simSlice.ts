@@ -99,20 +99,32 @@ export interface simConfig {
 }
 
 export interface ICharacter {
-  name: string;
+  key: string;
   ascension: number; // 0 to 6
   level: number;
   constellation: number; // 0 to 6
-  talents: {
-    auto: number,
-    skill: number,
-    burst: number,
-  } 
-  stats: number[];
+  talentLevelKeys: {
+    auto: number;
+    skill: number;
+    burst: number;
+  };
+  weapon: IWeapon;
+  artifacts: IArtifact; // not used in GO
+  stats: number[]; //base stats, should be pulled from api
+}
+
+export interface IWeapon {
+  key: string;
+  level: number; //1 to 90 inclusive
+  refinementIndex: number; //0 to 4 inclusive
+  stats: number[]; //weapon stats; should be pulled from api
 }
 
 export interface IArtifact {
-  stats: number[];
+  setKey: string; //set key
+  slotKey: string;
+  stats: number[]; //artifact stats
+  //not used fields
 }
 
 interface SimState {
@@ -121,6 +133,7 @@ interface SimState {
   hasChange: boolean;
   msg: string;
   hasErr: boolean;
+  characters: ICharacter[];
 }
 const initialState: SimState = {
   isLoading: false,
@@ -128,6 +141,7 @@ const initialState: SimState = {
   hasChange: false,
   msg: "",
   hasErr: false,
+  characters: [],
 };
 
 export const simSlice = createSlice({
